@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../static/icons/movie.svg" type="image/x-icon" />
+    <link rel="stylesheet" href="../static/styles.css" />
+    <title>{{ title }}</title>
+
+
+</head>
+
+<body>
+    {% block content %}
+    <!-- Depending on the route, include the corresponding content -->
+    {% if content_type == "add_movie" %}
+    {% include "movie_templates/add-movie.html" %}
+
+    {% elif content_type == "list_movies" %}
+    {% include "movie_templates/list-movies.html" %}
+
+    {% elif content_type == "update_movie" %}
+    {% include "movie_templates/update-movie.html" %}
+
+    {% elif content_type == "add_user" %}
+    {% include "user_templates/add-user.html" %}
+
+    {% elif content_type == "list_users" %}
+    {% include "user_templates/list-users.html" %}
+
+    {% else %}
+    {% include "base.html" %}
+
+    {% endif %}
+    {% endblock %}
+
+</body>
+
+</html>

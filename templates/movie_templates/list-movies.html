@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../static/icons/movie.svg" type="image/x-icon" />
+    <link rel="stylesheet" href="../static/styles.css" />
+    <title>User Movies</title>
+</head>
+
+<body>
+    <h1>Hey {{ user }}, these are your movies!</h1>
+    <div class="movies-container">
+        {% for movie_id, movie in movies.items() %}
+        <ul class="movies">
+            <h2>{{movie.get("name") }}</h2>
+            <li id="{{ movie_id }}">Director: {{movie.get("director") }}</li>
+            <li id="{{ movie_id }}">Year: {{movie.get("year") }}</li>
+            <li id="{{ movie_id }}">Rating: {{movie.get("rating") }}</li>
+        </ul>
+        {% endfor %}
+    </div>
+</body>
+
+</html>
