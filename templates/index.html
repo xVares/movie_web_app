@@ -4,37 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A Movie Web App to manage your favorite movies">
     <link rel="icon" href="../static/icons/movie.svg" type="image/x-icon" />
     <link rel="stylesheet" href="../static/styles.css" />
     <title>{{ title }}</title>
-
-
 </head>
 
 <body>
-    {% block content %}
-    <!-- Depending on the route, include the corresponding content -->
-    {% if content_type == "add_movie" %}
-    {% include "movie_templates/add-movie.html" %}
+    <header>
+        <h1>Movie Web App</h1>
+    </header>
+    <main>
+        {% block content %}
+        <!-- Depending on the route, include the corresponding content -->
+        {% if content_type == "add_movie" %}
+        {% include "movie_templates/add-movie.html" %}
 
-    {% elif content_type == "list_movies" %}
-    {% include "movie_templates/list-movies.html" %}
+        {% elif content_type == "list_movies" %}
+        {% include "movie_templates/list-movies.html" %}
 
-    {% elif content_type == "update_movie" %}
-    {% include "movie_templates/update-movie.html" %}
+        {% elif content_type == "update_movie" %}
+        {% include "movie_templates/update-movie.html" %}
 
-    {% elif content_type == "add_user" %}
-    {% include "user_templates/add-user.html" %}
+        {% elif content_type == "add_user" %}
+        {% include "user_templates/add-user.html" %}
 
-    {% elif content_type == "list_users" %}
-    {% include "user_templates/list-users.html" %}
+        {% elif content_type == "which_user" %}
+        {% include "user_templates/which-user.html" %}
 
-    {% else %}
-    {% include "base.html" %}
+        {% else %}
+        {% include "user_templates/list-users.html" %}
 
-    {% endif %}
-    {% endblock %}
-
+        {% endif %}
+        {% endblock %}
+    </main>
+    <footer></footer>
 </body>
 
 </html>

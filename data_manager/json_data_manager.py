@@ -22,9 +22,16 @@ class JSONDataManager(DataManagerInterface):
         try:
             with open(self.filename, "r") as f:
                 return json.load(f)
-        except FileNotFoundError:
-            print(f"Default file in path {self.filename} not found.")
+        except OSError as e:
+            print(f"Default file in path {self.filename} not found.\\n"
+                  f"Error: {e}")
             return None
+
+    def add_user(self):
+        pass
+
+    def delete_user(self):
+        pass
 
     def get_user_and_movies(self, user_id) -> tuple:
         """Return all the movies for a given user"""

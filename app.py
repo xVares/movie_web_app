@@ -1,7 +1,7 @@
 import logging
 import os
 from dotenv import load_dotenv
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, abort
 from data_manager.json_data_manager import JSONDataManager
 
 load_dotenv()
@@ -40,21 +40,21 @@ def render_index(title="Home - Movie App", content_type="home", **kwargs):
 
 
 @app.route("/")
-def home():
-    return render_index()
-
-
 @app.route("/users")
 def list_all_users():
     users = data_manager.get_all_users()
-    return render_index(title="List Users - Movie Web App", content_type="list_users", users=users)
+    return render_index(title="Users - Movie Web App", content_type="list_users", users=users)
 
 
-@app.route("/users/<int:user_id>")
+@app.route("/users/<user_id>")
 def list_user_movies(user_id):
-    user, movies = data_manager.get_user_and_movies(user_id)
-    return render_index(title="List Movies - Movie Web App", content_type="list_movies", user=user,
-                        movies=movies)
+    try:
+        user, movies = data_manager.get_user_and_movies(user_id)
+        return render_index(title=f"Movies of {user}  - Movie Web App", content_type="list_movies",
+                            user=user,
+                            movies=movies)
+    except KeyError as e:
+        abort(404)
 
 
 @app.route("/add_user", methods=["GET", "POST"])
@@ -67,23 +67,40 @@ def add_user():
         return render_index(title="Add User - Movie Web App", content_type="add_user")
 
 
-@app.route("/users/<int:user_id>/add_movie", methods=["GET", "POST"])
+@app.route("/users/<user_id>/add_movie", methods=["POST"])
 def add_movie(user_id):
     # if GET -> render form to add movie
-    return render_index(title="Add Movie - Movie Web App", content_type="add_movie")
     # if POST -> render success page
+    return render_index(title="Success! - Movie Web App", content_type="add_movie")
 
 
-@app.route("/users/<user_id>/update_movie/<movie_id>", methods=["GET", "PUT"])
+@app.route("/users/<user_id>/update_movie/<movie_id>", methods=["PUT"])
 def update_movie_details(user_id, movie_id):
-    # if GET -> render form to update movie
-    return render_index(title="Update Movie - Movie Web App", content_type="update_movie")
+    # if PUT -> render success form
+    pass
 
 
-@app.route("/users/<user_id>/delete_movie/<movie_id>", methods=["GET", "DELETE"])
+@app.route("/users/<user_id>/delete_movie/<movie_id>", methods=["DELETE"])
 def delete_movie(user_id, movie_id):
-    # if GET -> render form to delete movie
-    return render_index(title="Delete Movie - Movie Web App", content_type="delete_movie")
+    pass
+
+
+@app.route("/form/<type>")
+def render_form(type):
+    if type == "which_user":
+        render_index(title="Who are you? - Movie Web App", content_type="which_user")
+    elif type == "add_movie":
+        return render_index(title="Add Movie - Movie Web App", content_type="add_movie")
+    elif type == "delete_movie":
+        return render_index(title="Delete Movie - Movie Web App", content_type="delete_movie")
+    elif type == "update_movie":
+        return render_index(title="Update Movie - Movie Web App", content_type="update_movie")
+    elif type == "add_user":
+        pass
+    elif type == "delete_user":
+        pass
+    else:
+        abort(404)
 
 
 # --- Error Handler ---
