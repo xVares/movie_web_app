@@ -79,13 +79,13 @@ class JSONDataManager(DataManagerInterface):
                 stored_movie_data[fetched_movie_title] = new_movie
                 self.write_json(self.filename, stored_movie_data)
                 print(f"{fetched_movie_title} was successfully added to the list")
-        # TODO: implement Error handling
         except HTTPError as e:
             return None, 400, e
 
     def update_user_movies(self, user_id, movie_id):
         """Update all the movies for a given user"""
-        all_users = self.parse_json(self.filename)
+        pass
 
     def delete_user_movie(self, user_id, movie_id):
         """Delete the specified movie of a user"""
+        pass
