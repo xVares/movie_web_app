@@ -4,6 +4,15 @@ from abc import ABC, abstractmethod
 class DataManagerInterface(ABC):
     """Interface for JSON storage module."""
 
+    @staticmethod
+    def is_fetch_successful(response):
+        """
+        Check if fetching was successful based on response value and return Boolean
+        """
+        if response == "True":
+            return True
+        return False
+
     @abstractmethod
     def get_all_users(self):
         pass
@@ -17,7 +26,11 @@ class DataManagerInterface(ABC):
         pass
 
     @abstractmethod
-    def get_user_and_movies(self, user_id):
+    def get_user_name_and_movies(self, user_id):
+        pass
+
+    @abstractmethod
+    def add_movie(self, was_fetch_successful, fetched_res):
         pass
 
     @abstractmethod

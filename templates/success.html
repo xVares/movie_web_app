@@ -1,0 +1,15 @@
+<h2>
+    {% if content_type == "add_user_success" %}
+    User was successfully added
+    {% elif content_type == "delete_user_success" %}
+    User was successfully deleted
+    {% elif content_type == "add_movie_success" %}
+    Movie was successfully added
+    {% elif content_type == "update_movie_success" %}
+    Movie details were successfully updated
+    {% elif content_type == "delete_movie_success" %}
+    Movie was successfully deleted
+    {% else %}
+    Operation was successful
+    {% endif %}
+</h2>

@@ -1,26 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="../static/icons/movie.svg" type="image/x-icon" />
-    <link rel="stylesheet" href="../static/styles.css" />
-    <title>User Movies</title>
-</head>
-
-<body>
-    <h1>Hey {{ user }}, these are your movies!</h1>
-    <div class="movies-container">
-        {% for movie_id, movie in movies.items() %}
-        <ul class="movies">
-            <h2>{{movie.get("name") }}</h2>
-            <li id="{{ movie_id }}">Director: {{movie.get("director") }}</li>
-            <li id="{{ movie_id }}">Year: {{movie.get("year") }}</li>
-            <li id="{{ movie_id }}">Rating: {{movie.get("rating") }}</li>
+<div id="movies-container">
+    <h2>Hey {{ user }}, these are your movies!</h2>
+    <a href="{{ url_for('add_movie', user_id=user_id) }}">Add Movie</a>
+    {% for movie_id, movie in movies.items() %}
+    <div class="movies">
+        <h3>{{movie.get("name") }}</h3>
+        <a href="{{ url_for('update_movie_details', user_id=user_id, movie_id=movie_id) }}">Update</a>
+        <ul class="movie-properties">
+            <li>Director: {{movie.get("director") }}</li>
+            <li>Year: {{movie.get("year") }}</li>
+            <li>Rating: {{movie.get("rating") }}</li>
         </ul>
-        {% endfor %}
     </div>
-</body>
-
-</html>
+    {% endfor %}
+</div>

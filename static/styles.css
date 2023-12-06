@@ -1,0 +1,125 @@
+@import url("https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap");
+
+:root {
+    --bluish-gray: #3f5765;
+    --dark-bluish-gray: #2b3a42;
+    --neon-orange: #ff530d;
+    --silver-blue: #bdd4de;
+    --white: #efefef;
+}
+
+/* Global Styles (index.html) */
+
+html {
+    font-size: 32px;
+    background-color: black;
+    font-family: "Kaushan Script", cursive;
+}
+
+body {
+    margin: 0;
+    height: auto;
+    background-color: var(--dark-bluish-gray);
+    color: var(--neon-orange);
+
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+header {
+    background-color: var(--bluish-gray);
+}
+
+h1 {
+    font-size: 1.3rem;
+    color: #bdd4de;
+    background-color: #3f5765;
+}
+
+h2 {
+    font-size: 1rem;
+    position: relative;
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    outline: dotted 1px black;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    font-size: 18px;
+    text-decoration: none;
+    color: var(--silver-blue);
+    transition: color 0.3s ease;
+    outline: dotted 0.5px red;
+}
+
+a:hover {
+    color: var(--white);
+    text-decoration: underline;
+}
+
+ul {
+    padding: 0;
+    text-align: center;
+}
+
+.user-element {
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    background-color: var(--bluish-gray);
+    height: 100px;
+    padding: 10px;
+    text-align: center;
+    bottom: 0;
+}
+
+/* HTML file specific styles */
+
+#list-users {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.user-element-container > * {
+    font-size: 0.5rem;
+}
+.movies {
+    outline: solid 1px rgb(0, 0, 0);
+}
+
+#movies-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.movies > * {
+    color: var(--silver-blue);
+    text-align: left;
+    margin-left: 5px;
+}
+
+.movies > ul > * {
+    font-size: 1rem;
+    text-align: left;
+}
+
+/*
+.movie-properties > * {
+    display: flex;
+} */
