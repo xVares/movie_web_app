@@ -25,10 +25,7 @@
         {% include "movie_templates/list-movies.html" %}
 
         {% elif content_type == "add_user" %}
-        {% include "movie_templates/add-user.html" %}
-
-        {% elif content_type == "delete_user" %}
-        {% include "movie_templates/delete-user.html" %}
+        {% include "user_templates/add-user.html" %}
 
         {% elif content_type == "add_movie" %}
         {% include "movie_templates/add-movie.html" %}
@@ -37,10 +34,7 @@
         {% include "movie_templates/update-movie.html" %}
 
         {% elif content_type == "delete_movie" %}
-        {% include "user_templates/delete-movie.html" %}
-
-        {% elif content_type == "which_user" %}
-        {% include "user_templates/which-user.html" %}
+        {% include "movie_templates/delete-movie.html" %}
 
         {% else %}
         {% include "success.html" %}

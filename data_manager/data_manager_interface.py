@@ -18,11 +18,11 @@ class DataManagerInterface(ABC):
         pass
 
     @abstractmethod
-    def add_user(self):
+    def add_user(self, new_user_name):
         pass
 
     @abstractmethod
-    def delete_user(self):
+    def delete_user(self, user_id):
         pass
 
     @abstractmethod

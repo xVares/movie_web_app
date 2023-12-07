@@ -41,20 +41,34 @@ h1 {
 
 h2 {
     font-size: 1rem;
-    position: relative;
+    /* position: relative; */
 }
 
-main {
+/* replace display:contents */
+h3 {
+    margin-bottom: 0px;
+}
+
+/* main {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     outline: dotted 1px black;
-}
+} */
 
 main {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-around;
+    align-items: center;
+    outline: dotted 1px black;
+}
+
+form {
+    display: flex;
+    border: solid 1px black;
+    flex-direction: row;
 }
 
 a {
@@ -75,11 +89,6 @@ ul {
     text-align: center;
 }
 
-.user-element {
-    display: flex;
-    flex-direction: column;
-}
-
 footer {
     background-color: var(--bluish-gray);
     height: 100px;
@@ -90,6 +99,50 @@ footer {
 
 /* HTML file specific styles */
 
+/* Success Message */
+
+#success-message {
+    display: flex;
+}
+
+/* List User */
+
+#user-list {
+    border: solid 1px black;
+}
+
+.form-user-and-delete {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-grow: 0;
+    width: 12rem;
+}
+
+/* TODO: adjust size of all el in form  */
+.form-user-and-delete > * {
+    width: 33%;
+}
+
+/* List Movies */
+
+#update-delete-movie {
+    justify-content: space-between;
+}
+
+#user-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-element {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 100px;
+    margin: 50px 0 50px 0;
+}
+
 #list-users {
     display: flex;
     flex-direction: column;
@@ -99,8 +152,12 @@ footer {
 .user-element-container > * {
     font-size: 0.5rem;
 }
+
 .movies {
     outline: solid 1px rgb(0, 0, 0);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 #movies-container {
@@ -108,7 +165,7 @@ footer {
     flex-direction: column;
 }
 
-.movies > * {
+.movie-properties {
     color: var(--silver-blue);
     text-align: left;
     margin-left: 5px;
@@ -119,7 +176,21 @@ footer {
     text-align: left;
 }
 
-/*
 .movie-properties > * {
     display: flex;
-} */
+}
+
+/* Update Movie */
+
+#form-update-movie {
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+#form-update-movie > input {
+    margin-bottom: 3rem;
+}
+
+#form-update-movie > label {
+    margin-top: 0.5rem;
+}

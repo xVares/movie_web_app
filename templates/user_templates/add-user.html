@@ -1,18 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="../static/icons/add-user.svg" type="image/x-icon" />
-    <link rel="stylesheet" href="../static/styles.css" />
-    <title>Add User</title>
-</head>
-
-<body>
-    <form action="" class="add-user">
-
-    </form>
-</body>
-
-</html>
+<form class="add-user" action="{{ url_for('add_user') }}" method="post">
+    <input type="text" name="add_user" value="new_user_name">
+    <button type="submit">Add User</button>
+</form>

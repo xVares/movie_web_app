@@ -1,4 +1,14 @@
-<h2>Update Movie</h2>
-<form action="" class="update-movie">
+<form id="form-update-movie" action="{{ url_for('update_movie_details', user_id=user_id, movie_id=movie_id) }}"
+    method="post">
+    <label for="movie_director">Director</label>
+    <input type="text" name="movie_director" value="{{ movie.get('director') }}"
+        placeholder="{{ movie.get('director') }}">
 
+    <label for="movie_year">Year</label>
+    <input type="text" name="movie_year" value="{{ movie.get('year') }}" placeholder="{{ movie.get('year') }}">
+
+    <label for="movie_rating">Rating</label>
+    <input type="text" name="movie_rating" value="{{ movie.get('rating') }}" placeholder="{{ movie.get('rating') }}">
+
+    <button type="submit">Update {{movie.get("name") }}</button>
 </form>

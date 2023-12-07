@@ -1,16 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="../static/icons/minus-circle.svg" type="image/x-icon" />
-    <link rel="stylesheet" href="../static/styles.css" />
-    <title>Movie Deleted</title>
-</head>
-
-<body>
-
-</body>
-
-</html>
+<form class="delete-movie" action="{{ url_for('delete_movie', user_id=user_id, movie_id=movie_id) }}" method="delete">
+    <button type="submit">Delete Movie</button>
+</form>
