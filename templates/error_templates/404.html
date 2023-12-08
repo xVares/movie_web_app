@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../static/icons/error.svg" type="image/x-icon" />
-    <link rel="stylesheet" href="../static/styles.css" />
-    <title>page not found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <title>Page not Found</title>
 </head>
 
 <body>
     <h1>{{ error }}</h1>
+    <h2>{{ error_reason }}</h2>
 
 </body>
 

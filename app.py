@@ -9,9 +9,9 @@ load_dotenv()
 
 # TODO: del test db, outcomment real db
 # JSON_DATA_PATH = "user_data/movie_data.json"
-TEST_JSON_DATA_PATH = "tests/test.json"
+TEST_JSON_DATA_PATH = "tests/db_test.json"
 API_KEY = os.environ.get("MY_API_KEY")
-FETCH_MOVIE_URL = f"http://www.omdbapi.com/?apikey={API_KEY}&"
+FETCH_MOVIE_URL = f"http://www.omdbapi.com/?apikey={API_KEY}"
 
 data_manager = JSONDataManager(TEST_JSON_DATA_PATH)
 app = Flask(__name__)
@@ -61,7 +61,7 @@ def fetch_data(url, movie_name):
              If unsuccessful, both elements are None, and the second element is False.
     :rtype: tuple
     """
-    res = requests.get(url, {"t": movie_name})
+    res = requests.get(url, params=movie_name)
     movie_data = res.json()
     is_successful = movie_data["Response"]
 
@@ -79,17 +79,16 @@ def list_all_users():
 
 @app.route("/users/<user_id>")
 def list_user_movies(user_id):
-    try:
-        user_name, movies = data_manager.get_user_name_and_movies(user_id)
+    user_name, movies = data_manager.get_user_name_and_movies(user_id)
 
+    # Is user in db? -> Render list movies page
+    if user_name:
         return render_index(title=f"Movies of {user_name}  - Movie Web App",
                             content_type="list_movies",
                             user=user_name,
                             movies=movies,
                             user_id=user_id)
-    except KeyError as e:
-        print(f"Error:{e}")
-        abort(404)
+    abort(400, description="User not in database.")
 
 
 @app.route("/add_user", methods=["GET", "POST"])
@@ -97,6 +96,7 @@ def add_user():
     if request.method == "GET":
         return render_index(title="Add User - Movie Web App", content_type="add_user")
 
+    # If POST -> Add new user to db
     new_user_name = request.form.get("new_user_name")
     data_manager.add_user(new_user_name)
 
@@ -111,7 +111,7 @@ def delete_user():
     if is_deletion_successful:
         return render_index(title="Success! - Movie Web App", content_type="delete_user_success")
 
-    abort(400, description="")
+    abort(400, description="We couldn't find you. Please try again")
 
 
 @app.route("/users/<user_id>/add_movie", methods=["GET", "POST"])
@@ -120,14 +120,19 @@ def add_movie(user_id):
         return render_index(title="Add Movie - Movie Web App", content_type="add_movie",
                             user_id=user_id)
 
-    # if POST -> fetch movie data and render success page
-    movie_name = request.form.get("movie_name")  # get name -> from form
+    # If POST -> Fetch movie data
+    movie_name = request.form.get("movie_name")
     movie_data, is_fetch_successful = fetch_data(FETCH_MOVIE_URL,
                                                  {"t": movie_name})
 
+    # Is fetching successful? -> Try to add movie to users favorites
     if is_fetch_successful:
-        data_manager.add_movie(is_fetch_successful, movie_data)
-        return render_index(title="Success! - Movie Web App", content_type="add_movie_success")
+        adding_successful = data_manager.add_movie(user_id, is_fetch_successful, movie_data)
+
+        # Is movie successfully added? -> Render success page
+        if adding_successful:
+            return render_index(title="Success! - Movie Web App", content_type="add_movie_success")
+        abort(400, description="Your movie is already in your favorites.")
 
     abort(400, description="Sorry! We couldn't find your movie.")
 
@@ -136,15 +141,29 @@ def add_movie(user_id):
 def update_movie_details(user_id, movie_id):
     if request.method == "GET":
         user_name, movies = data_manager.get_user_name_and_movies(user_id)
-        movie = movies.get(movie_id)
-        return render_index(title="Update Movie - Movie Web App", content_type="update_movie",
-                            user_id=user_id,
-                            movie_id=movie_id,
-                            movie=movie)
-    # if POST -> update movie
-    update_data = dict(request.form)
-    is_update_successful = data_manager.update_user_movies(user_id, movie_id, update_data)
 
+        # Is movie in users favorites? -> Render update page
+        movie = movies.get(movie_id)
+        if movie:
+            return render_index(title="Update Movie - Movie Web App", content_type="update_movie",
+                                user_id=user_id,
+                                movie_id=movie_id,
+                                movie=movie)
+        abort(400, description="Please don't type the URL manually. Let yourself redirect.")
+
+    # If POST -> Get form data
+    update_data = dict(request.form)
+
+    # Is form empty? -> raise 400
+    if not update_data:
+        abort(400, description="Please fill out the form to update the data")
+
+    # Change update data to desired type
+    update_data["year"] = int(update_data.get("year"))
+    update_data["rating"] = int(update_data.get("rating"))
+
+    # Try update -> If successful render success page
+    is_update_successful = data_manager.update_user_movies(user_id, movie_id, update_data)
     if is_update_successful:
         return render_index(title="Update Movie - Movie Web App",
                             content_type="update_movie_success")
@@ -168,6 +187,7 @@ def bad_request(e, description="You might have a typo in your request."):
                            error_reason=f"{description} Please check your input"), 400
 
 
+@app.errorhandler(404)
 def page_not_found(e):
     return render_template("error_templates/404.html", error=e), 404
 

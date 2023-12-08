@@ -32,7 +32,7 @@ class DataManagerInterface(ABC):
         pass
 
     @abstractmethod
-    def add_movie(self, was_fetch_successful, fetched_res):
+    def add_movie(self, user_id, was_fetch_successful, fetched_res):
         """Add a new movie to the user's collection."""
         pass
 

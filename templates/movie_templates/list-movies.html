@@ -3,14 +3,14 @@
     <h2>Sorry {{ user }}, you currently have no movies registered!</h2>
 
     {% else %}
-    <h2>Hey {{ user }}, these are your movies!</h2>
+    <h2>Hey {{ user }}, here are your movies!</h2>
     <a href="{{ url_for('add_movie', user_id=user_id) }}">Add Movie</a>
 
     {% for movie_id, movie in movies.items() %}
 
 
     <div class="movies">
-        <h3>{{ movie.get("name") }}</h3>
+        <h3>{{ movie.get("title") }}</h3>
         <ul class="movie-properties">
             <li>Director: {{movie.get("director") }}</li>
             <li>Year: {{movie.get("year") }}</li>
@@ -19,7 +19,7 @@
         <form id="update-delete-movie" action="{{ url_for('delete_movie', user_id=user_id, movie_id=movie_id) }}"
             method="post">
             <a href="{{ url_for('update_movie_details', user_id=user_id, movie_id=movie_id) }}">Update</a>
-            <button type="submit">Delete {{movie.get("name") }}</button>
+            <button type="submit">Delete {{movie.get("title") }}</button>
         </form>
     </div>
 

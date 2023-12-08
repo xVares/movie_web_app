@@ -71,7 +71,7 @@ class JSONDataManager(DataManagerInterface):
             return True
         return False
 
-    def get_user_name_and_movies(self, user_id) -> Union[tuple, False]:
+    def get_user_name_and_movies(self, user_id):
         """
         Get the name and movies of a user from the database.
 
@@ -84,9 +84,9 @@ class JSONDataManager(DataManagerInterface):
         all_users = self.get_all_users()
         user = all_users.get(user_id)
 
-        # Is user in database? -> return False
+        # Is user not in database? -> return None
         if not user:
-            return False
+            return None
 
         user_name = user.get("name")
         user_movies = user.get("movies")
@@ -96,7 +96,7 @@ class JSONDataManager(DataManagerInterface):
             user_movies = None
         return user_name, user_movies
 
-    def add_movie(self, is_fetch_successful, fetched_movie_data) -> bool:
+    def add_movie(self, user_id, is_fetch_successful, fetched_movie_data) -> bool:
         """
         Add a new movie to the user's collection.
 
@@ -109,25 +109,32 @@ class JSONDataManager(DataManagerInterface):
         """
         fetched_movie_title = fetched_movie_data["Title"]
         fetched_movie_director = fetched_movie_data["Director"]
-        fetched_movie_year = fetched_movie_data["Year"]
-        fetched_movie_rating = fetched_movie_data["imdbRating"]
+        fetched_movie_year = int(fetched_movie_data["Year"])
+        fetched_movie_rating = float(fetched_movie_data["imdbRating"])
 
-        stored_movie_data = self.get_all_users()
+        all_users = self.get_all_users()
+        user = all_users.get(user_id)
+        user_movies = user.get("movies")
 
         # Is movie already in users favorites? -> return False
-        if fetched_movie_title in stored_movie_data:
-            return False
+        print(f"user_movies: {user_movies}")
+        for movie in user_movies.values():
+            print(f"Movie: {movie}")
+            if fetched_movie_title == movie["title"]:
+                return False
 
         unique_id = str(uuid4())
         new_movie = {
-            "name": fetched_movie_title,
+            "title": fetched_movie_title,
             "director": fetched_movie_director,
             "rating": fetched_movie_rating,
             "year": fetched_movie_year
         }
+
         #  Add fetched movie to database & return True
-        stored_movie_data["movies"][unique_id] = new_movie
-        self.write_json(self.filename, stored_movie_data)
+        user["movies"][unique_id] = new_movie
+        all_users[user_id] = user
+        self.write_json(self.filename, all_users)
         return True
 
     def update_user_movies(self, user_id, movie_id, update_data) -> bool:
