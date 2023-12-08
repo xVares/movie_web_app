@@ -98,12 +98,9 @@ def add_user():
         return render_index(title="Add User - Movie Web App", content_type="add_user")
 
     new_user_name = request.form.get("new_user_name")
-    is_adding_successful = data_manager.add_user(new_user_name)
+    data_manager.add_user(new_user_name)
 
-    if is_adding_successful:
-        return render_index(title="Success", content_type="add_user_success")
-
-    abort()
+    return render_index(title="Success", content_type="add_user_success")
 
 
 @app.route("/delete_user", methods=["POST"])
@@ -124,7 +121,7 @@ def add_movie(user_id):
                             user_id=user_id)
 
     # if POST -> fetch movie data and render success page
-    movie_name = request.form.get("movie_name", "")  # get name -> from form
+    movie_name = request.form.get("movie_name")  # get name -> from form
     movie_data, is_fetch_successful = fetch_data(FETCH_MOVIE_URL,
                                                  {"t": movie_name})
 
@@ -145,9 +142,12 @@ def update_movie_details(user_id, movie_id):
                             movie_id=movie_id,
                             movie=movie)
     # if POST -> update movie
-    data_manager.update_user_movies(user_id, movie_id)
-    return render_index(title="Update Movie - Movie Web App",
-                        content_type="update_movie_success")
+    update_data = dict(request.form)
+    is_update_successful = data_manager.update_user_movies(user_id, movie_id, update_data)
+
+    if is_update_successful:
+        return render_index(title="Update Movie - Movie Web App",
+                            content_type="update_movie_success")
 
 
 @app.route("/users/<user_id>/delete_movie/<movie_id>", methods=["POST"])
@@ -163,7 +163,7 @@ def delete_movie(user_id, movie_id):
 
 # --- Error Handler ---
 @app.errorhandler(400)
-def bad_request(e, description="You might have a typo in your request"):
+def bad_request(e, description="You might have a typo in your request."):
     return render_template("error_templates/400.html", error=e,
                            error_reason=f"{description} Please check your input"), 400
 

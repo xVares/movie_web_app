@@ -10,19 +10,6 @@ class JSONDataManager(DataManagerInterface):
         self.filename = filename
 
     @staticmethod
-    def parse_json(filename) -> dict:
-        """
-        Parse JSON data from a file.
-
-        :param filename: The path to the JSON file.
-        :type filename: str
-        :return: A dictionary containing the parsed JSON data.
-        :rtype: dict
-        """
-        with open(filename, "r") as file:
-            return json.load(file)
-
-    @staticmethod
     def write_json(filename, content):
         """
         Write JSON content to a file.
@@ -53,24 +40,20 @@ class JSONDataManager(DataManagerInterface):
         Adds a new user to the database.
 
         :param new_user_name: The name of the new user.
-        :return: True if the user was successfully added, False if the user already exists
-                 in the database.
         """
-        all_user = self.parse_json(self.filename)
+        all_users = self.get_all_users()
 
         # Generate a new user ID and add the user to the database
         new_user_id = str(uuid4())
-        all_user[new_user_id] = {
+        all_users[new_user_id] = {
             "name": new_user_name,
             "movies": {}
         }
 
-        # Update the JSON file with the new user
-        self.write_json(self.filename, all_user)
+        # Update JSON file with new user
+        self.write_json(self.filename, all_users)
 
-        return True
-
-    def delete_user(self, user_id):
+    def delete_user(self, user_id) -> bool:
         """
         Delete a user from the database.
 
@@ -79,13 +62,13 @@ class JSONDataManager(DataManagerInterface):
         :return: True if the user was successfully deleted, False if the user does not exist.
         :rtype: bool
         """
-        all_user = self.parse_json(self.filename)
+        all_users = self.get_all_users()
 
-        if user_id in all_user:
-            del all_user[user_id]
-            self.write_json(self.filename, all_user)
+        # Is user in database? -> del & return True
+        if user_id in all_users:
+            del all_users[user_id]
+            self.write_json(self.filename, all_users)
             return True
-
         return False
 
     def get_user_name_and_movies(self, user_id) -> Union[tuple, False]:
@@ -101,15 +84,16 @@ class JSONDataManager(DataManagerInterface):
         all_users = self.get_all_users()
         user = all_users.get(user_id)
 
+        # Is user in database? -> return False
         if not user:
             return False
 
         user_name = user.get("name")
         user_movies = user.get("movies")
 
+        # Does user have any movies?
         if not user_movies:
             user_movies = None
-
         return user_name, user_movies
 
     def add_movie(self, is_fetch_successful, fetched_movie_data) -> bool:
@@ -128,8 +112,9 @@ class JSONDataManager(DataManagerInterface):
         fetched_movie_year = fetched_movie_data["Year"]
         fetched_movie_rating = fetched_movie_data["imdbRating"]
 
-        stored_movie_data = self.parse_json(self.filename)
+        stored_movie_data = self.get_all_users()
 
+        # Is movie already in users favorites? -> return False
         if fetched_movie_title in stored_movie_data:
             return False
 
@@ -140,16 +125,68 @@ class JSONDataManager(DataManagerInterface):
             "rating": fetched_movie_rating,
             "year": fetched_movie_year
         }
-        #  Add fetched movie to database
+        #  Add fetched movie to database & return True
         stored_movie_data["movies"][unique_id] = new_movie
         self.write_json(self.filename, stored_movie_data)
-
         return True
 
-    def update_user_movies(self, user_id, movie_id):
-        """Update all the movies for a given user"""
-        pass
+    def update_user_movies(self, user_id, movie_id, update_data) -> bool:
+        """
+        Update the specified movie data for a given user.
 
-    def delete_user_movie(self, user_id, movie_id):
-        """Delete the specified movie of a user"""
-        pass
+        :param user_id: The unique identifier of the user.
+        :type user_id: str
+        :param movie_id: The unique identifier of the movie to be updated.
+        :type movie_id: str
+        :param update_data: The updated data for the movie.
+        :type update_data: dict
+        :return: True if the movie data was successfully updated, False if the user or movie does not exist.
+        :rtype: bool
+        """
+        all_users = self.get_all_users()
+        user = all_users.get(user_id)
+        has_movies = user.get("movies")
+
+        # Is user in database or has user movies? -> return False
+        if not user or not has_movies:
+            return False
+
+        # Update movie data for user
+        user_movies = user["movies"]
+        user_movies[movie_id].update(update_data)
+        user["movies"] = user_movies
+        all_users[user_id] = user
+
+        # Write updated data back to JSON file
+        self.write_json(self.filename, all_users)
+        return True
+
+    def delete_user_movie(self, user_id, movie_id) -> bool:
+        """
+        Delete the specified movie of a user.
+
+        :param user_id: The unique identifier of the user.
+        :type user_id: str
+        :param movie_id: The unique identifier of the movie to be deleted.
+        :type movie_id: str
+        :return: True if the movie was successfully deleted, False if the user or movie does not exist.
+        :rtype: bool
+        """
+
+        all_users = self.get_all_users()
+        user = all_users.get(user_id)
+        has_movies = user.get("movies")
+
+        # Is user in database or has user movies? -> return False
+        if not user or not has_movies:
+            return False
+
+        # Delete movie
+        user_movies = user["movies"]
+        del user_movies[movie_id]
+        user["movies"] = user_movies
+        all_users[user_id] = user
+
+        # Write updated data back to JSON file
+        self.write_json(self.filename, all_users)
+        return True
