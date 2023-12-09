@@ -14,7 +14,12 @@
     <header>
         <h1>Movie Web App</h1>
     </header>
-    <a href="{{ url_for('list_all_users') }}">Home</a>
+    <nav>
+        <div class="nav-links">
+            <a id="home" href="{{ url_for('list_all_users') }}">Home</a>
+            <a href="{{ url_for('add_user') }}">Add User</a>
+        </div>
+    </nav>
     <main>
         {% block content %}
         <!-- Depending on the route, include the corresponding content -->
@@ -43,7 +48,7 @@
         {% endif %}
         {% endblock %}
     </main>
-    <footer>Footer</footer>
+    <footer></footer>
 </body>
 
 </html>

@@ -1,4 +1,7 @@
-<form class="add-user" action="{{ url_for('add_user') }}" method="post">
-    <input type="text" name="new_user_name">
-    <button type="submit">Add User</button>
-</form>
+<div class="add-user-container">
+    <h2>Add User</h2>
+    <form class="add-user" action="{{ url_for('add_user') }}" method="post">
+        <input type="text" name="new_username">
+        <button class="add-btn" type="submit">Submit</button>
+    </form>
+</div>

@@ -1,15 +1,24 @@
+<h2>Update {{ movie.get("title") }}</h2>
+
 <form id="form-update-movie" action="{{ url_for('update_movie_details', user_id=user_id, movie_id=movie_id) }}"
     method="post">
-    <label for="director">Director</label>
-    <input type="text" name="director" value="{{ movie.get('director') }}" placeholder="{{ movie.get('director') }}"
-        required>
+    <div class="input-container">
+        <label for="director">Director</label>
+        <input type="text" name="director" value="{{ movie.get('director') }}" placeholder="{{ movie.get('director') }}"
+            required>
+    </div>
 
-    <label for="year">Year</label>
-    <input type="number" name="year" value="{{ movie.get('year') }}" placeholder="{{ movie.get('year') }}" required>
+    <div class="input-container">
+        <label for="year">Year</label>
+        <input type="number" name="year" value="{{ movie.get('year') }}" placeholder="{{ movie.get('year') }}" min="0"
+            required>
+    </div>
 
-    <label for="rating">Rating</label>
-    <input type="number" step="0.1" name="rating" value="{{ movie.get('rating') }}"
-        placeholder="{{ movie.get('rating') }}" required>
+    <div class="input-container">
+        <label for="rating">Rating</label>
+        <input type="number" step="0.1" name="rating" value="{{ movie.get('rating') }}"
+            placeholder="{{ movie.get('rating') }}" min="0.0" max="10.0" pattern="[1-9]\d*\.?\d*" required>
+    </div>
 
-    <button type="submit">Update {{ movie.get("title") }}</button>
+    <button class="update-btn" type="submit">Update</button>
 </form>

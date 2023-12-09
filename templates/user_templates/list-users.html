@@ -1,15 +1,13 @@
-<h2>Users</h2>
-<div id="list-users">
-    <a href="{{ url_for('add_user') }}">Add User</a>
+<div id="list-users-container">
     <ul id="user-list">
-
+        <h2>Users</h2>
         {% for user_id, user in users.items() %}
         <li class="user-element">
             <form class="form-user-and-delete" action="{{ url_for('delete_user') }}" method="post">
                 <a href="{{ url_for('list_user_movies', user_id=user_id) }}">{{ user["name"] }}</a>
                 <a href="{{ url_for('add_movie', user_id=user_id) }}">Add Movie</a>
                 <input type="hidden" name="user_id" value="{{ user_id }}">
-                <button type="submit">Delete User</button>
+                <button class="del-btn" type="submit">Delete User</button>
             </form>
         </li>
         {% endfor %}

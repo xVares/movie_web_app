@@ -1,0 +1,77 @@
+{
+    "7a0a3e50-9964-4e61-87d1-2d5d8ef9f96c": {
+        "name": "Alice",
+        "movies": {
+            "e8921b4c-9c6a-4f53-bb1c-1ba71626d45e": {
+                "title": "Inception",
+                "director": "Christopher Nolan",
+                "year": 2010,
+                "rating": 8.8
+            },
+            "7101fdd5-e372-4a26-aae3-b0efb5b0c4a8": {
+                "title": "The Dark Knight",
+                "director": "Christopher Nolan",
+                "year": 2008,
+                "rating": 9.0
+            },
+            "2e28cb52-2b7b-4a66-909a-7b115b0e58a2": {
+                "title": "Interstellar",
+                "director": "Christopher Nolan",
+                "year": 2014,
+                "rating": 8.6
+            },
+            "b6b85bc2-9968-48ec-b49f-a7b5c972616b": {
+                "title": "Batman",
+                "director": "Tim Burton",
+                "rating": 7.5,
+                "year": 1989
+            }
+        }
+    },
+    "d3a2f377-460d-442d-af9f-98a6dbec2c6c": {
+        "name": "Bob",
+        "movies": {
+            "b63fe963-8bfc-4a86-b08f-973c2ec47a16": {
+                "title": "Dunkirk",
+                "director": "Christopher Nolan",
+                "year": 2017,
+                "rating": 7.8
+            },
+            "ad6e3141-4f0e-4f23-bef6-ef0b6a44b268": {
+                "title": "Memento",
+                "director": "Christopher Nolan",
+                "year": 2000,
+                "rating": 8.5
+            },
+            "6357d757-1bb2-4d80-9b9d-1996f4fbd944": {
+                "title": "The Prestige",
+                "director": "Christopher Nolan",
+                "year": 2006,
+                "rating": 8.5
+            }
+        }
+    },
+    "b2cf23e2-48f0-4c3f-b45a-5d76b656d9f2": {
+        "name": "Charlie",
+        "movies": {
+            "8b6462d7-aa2a-43c1-aa09-4bba5ce6acdb": {
+                "title": "Batman Begins",
+                "director": "Christopher Nolan",
+                "year": 2005,
+                "rating": 8.2
+            },
+            "db05b6e3-7c05-48f1-a98b-76f49c0efc9d": {
+                "title": "Insomnia",
+                "director": "Christopher Nolan",
+                "year": 2002,
+                "rating": 7.2
+            },
+            "e0a0c62b-86b7-4c81-9487-b08026ffef58": {
+                "title": "Tenet",
+                "director": "Christopher Nolan",
+                "year": 2020,
+                "rating": 7.4
+            }
+        }
+    }
+}

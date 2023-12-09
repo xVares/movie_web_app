@@ -17,7 +17,7 @@ class DataManagerInterface(ABC):
         pass
 
     @abstractmethod
-    def add_user(self, new_user_name):
+    def add_user(self, new_username):
         """Add a new user to the storage."""
         pass
 
@@ -27,7 +27,7 @@ class DataManagerInterface(ABC):
         pass
 
     @abstractmethod
-    def get_user_name_and_movies(self, user_id):
+    def get_username_and_movies(self, user_id):
         """Get the name and movies of a user from the storage."""
         pass
 

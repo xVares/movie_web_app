@@ -31,30 +31,80 @@ body {
 
 header {
     background-color: var(--bluish-gray);
+    border-radius: 0 0 20px 20px;
 }
 
 h1 {
-    font-size: 1.3rem;
+    font-size: 1.7rem;
     color: #bdd4de;
     background-color: #3f5765;
 }
 
 h2 {
     font-size: 1rem;
-    /* position: relative; */
+    margin-top: 0;
+    border-bottom: solid 1px var(--neon-orange);
 }
 
-/* replace display:contents */
 h3 {
+    font-size: 1rem;
     margin-bottom: 0px;
+    color: var(--silver-blue);
+    text-decoration: underline;
 }
 
-/* main {
-    flex-grow: 1;
+nav {
     display: flex;
-    flex-direction: column;
-    outline: dotted 1px black;
-} */
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 1.5rem;
+
+    .nav-links {
+        display: flex;
+        justify-content: space-between;
+        width: 508px;
+
+        & a {
+            font-size: 0.8rem;
+            padding: 15px;
+            border-bottom: solid 0.5px var(--silver-blue);
+            border-radius: 0.1rem;
+        }
+    }
+}
+
+button {
+    font: inherit;
+    font-size: 0.6rem;
+    background: none;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    color: var(--silver-blue);
+}
+
+.add-btn {
+    margin-left: 5px;
+
+    &:hover {
+        color: forestgreen;
+        text-decoration: underline;
+    }
+}
+
+.update-btn {
+    &:hover {
+        color: forestgreen;
+        text-decoration: underline;
+    }
+}
+
+.del-btn {
+    &:hover {
+        color: firebrick;
+        text-decoration: underline;
+    }
+}
 
 main {
     display: flex;
@@ -62,21 +112,18 @@ main {
     flex-grow: 1;
     justify-content: space-around;
     align-items: center;
-    outline: dotted 1px black;
 }
 
 form {
     display: flex;
-    border: solid 1px black;
     flex-direction: row;
 }
 
 a {
-    font-size: 18px;
+    font-size: 0.6rem;
     text-decoration: none;
     color: var(--silver-blue);
     transition: color 0.3s ease;
-    outline: dotted 0.5px red;
 }
 
 a:hover {
@@ -92,92 +139,119 @@ ul {
 footer {
     background-color: var(--bluish-gray);
     height: 100px;
+    margin-top: 1rem;
     padding: 10px;
     text-align: center;
-    bottom: 0;
+    border-radius: 20px 20px 0 0;
 }
 
-/* HTML file specific styles */
+/* --- HTML file specific styles --- */
 
-/* Success Message */
+/* Add User */
 
-#success-message {
+.add-user-container {
     display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 /* List User */
 
-#user-list {
-    border: solid 1px black;
+#list-users-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    #add-user-btn {
+        text-align: left;
+        padding-left: 0.5rem;
+    }
+
+    #user-list {
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        padding: 30px;
+        border: solid 1px black;
+        box-shadow: 0 0 1rem;
+
+        .user-element {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin: 20px 0;
+        }
+    }
 }
 
 .form-user-and-delete {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    gap: 20px;
+
     flex-grow: 0;
     width: 12rem;
+    padding: 30px;
+    border: solid 1px black;
+    border-radius: 15px;
+
+    & * {
+        width: 33%;
+    }
 }
 
-/* TODO: adjust size of all el in form  */
-.form-user-and-delete > * {
-    width: 33%;
+/* Add Movie */
+
+.add-movie-container {
+    position: absolute;
 }
 
 /* List Movies */
 
-#update-delete-movie {
-    justify-content: space-between;
-}
-
-#user-list {
+#movies-container {
     display: flex;
     flex-direction: column;
+
+    #add-movie-btn {
+        margin-bottom: 1rem;
+        text-align: left;
+        padding-left: 10px;
+    }
 }
 
-.user-element {
+.movies {
+    outline: solid 1px black;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
-    gap: 100px;
-    margin: 50px 0 50px 0;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    box-shadow: 0 0 1rem;
 }
 
-#list-users {
+#form-update-delete-movie {
+    padding: 0.4rem;
     display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+    justify-content: space-between;
+    border-top: solid 1px black;
 }
 
 .user-element-container > * {
     font-size: 0.5rem;
 }
 
-.movies {
-    outline: solid 1px rgb(0, 0, 0);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-#movies-container {
-    display: flex;
-    flex-direction: column;
-}
-
 .movie-properties {
     color: var(--silver-blue);
     text-align: left;
     margin-left: 5px;
-}
 
-.movies > ul > * {
-    font-size: 1rem;
-    text-align: left;
-}
-
-.movie-properties > * {
-    display: flex;
+    & li {
+        list-style-type: disc;
+        display: flex;
+        text-align: left;
+        font-size: 0.7rem;
+    }
 }
 
 /* Update Movie */
@@ -185,12 +259,37 @@ footer {
 #form-update-movie {
     flex-direction: column;
     justify-content: space-evenly;
+    gap: 2rem;
 }
 
-#form-update-movie > input {
-    margin-bottom: 3rem;
+.input-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    margin-bottom: 10px;
+
+    & label {
+        color: var(--silver-blue);
+        margin: 0.5rem 0;
+        border-bottom: solid 1px var(--silver-blue);
+    }
 }
 
-#form-update-movie > label {
-    margin-top: 0.5rem;
+/* Success Message */
+
+#success-message {
+    display: flex;
+}
+
+/* Error Message */
+
+.error-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+
+    .error-message {
+        font-family: Arial, Helvetica, sans-serif;
+    }
 }

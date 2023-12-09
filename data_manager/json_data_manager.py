@@ -1,5 +1,4 @@
 import json
-from abc import ABC
 from uuid import uuid4
 from .data_manager_interface import DataManagerInterface
 from typing import Union
@@ -16,6 +15,7 @@ class JSONDataManager(DataManagerInterface):
 
         :param filename: The path to the JSON file.
         :type filename: str
+
         :param content: The data to be written to the file.
         :type content: Any valid JSON-serializable object
         """
@@ -35,18 +35,18 @@ class JSONDataManager(DataManagerInterface):
         except OSError:
             return None
 
-    def add_user(self, new_user_name):
+    def add_user(self, new_username):
         """
         Adds a new user to the database.
 
-        :param new_user_name: The name of the new user.
+        :param new_username: The name of the new user.
         """
         all_users = self.get_all_users()
 
         # Generate a new user ID and add the user to the database
         new_user_id = str(uuid4())
         all_users[new_user_id] = {
-            "name": new_user_name,
+            "name": new_username,
             "movies": {}
         }
 
@@ -59,6 +59,7 @@ class JSONDataManager(DataManagerInterface):
 
         :param user_id: The unique identifier of the user to be deleted.
         :type user_id: str
+
         :return: True if the user was successfully deleted, False if the user does not exist.
         :rtype: bool
         """
@@ -71,12 +72,13 @@ class JSONDataManager(DataManagerInterface):
             return True
         return False
 
-    def get_user_name_and_movies(self, user_id):
+    def get_username_and_movies(self, user_id):
         """
         Get the name and movies of a user from the database.
 
         :param user_id: The unique identifier of the user.
         :type user_id: str
+
         :return: A tuple containing the user's name and movie collection if the user exists,
                  otherwise False.
         :rtype: Union[tuple, False]
@@ -88,23 +90,29 @@ class JSONDataManager(DataManagerInterface):
         if not user:
             return None
 
-        user_name = user.get("name")
+        username = user.get("name")
         user_movies = user.get("movies")
 
         # Does user have any movies?
         if not user_movies:
             user_movies = None
-        return user_name, user_movies
+        return username, user_movies
 
     def add_movie(self, user_id, is_fetch_successful, fetched_movie_data) -> bool:
         """
         Add a new movie to the user's collection.
 
-        :param is_fetch_successful: A boolean indicating whether the movie data was successfully fetched.
+        :param user_id: ID of the user to whom the movie will be added.
+        :type user_id: str
+
+        :param is_fetch_successful: Boolean indicating if the movie data was successfully fetched.
         :type is_fetch_successful: bool
-        :param fetched_movie_data: The data of the fetched movie.
+
+        :param fetched_movie_data: Data of the fetched movie.
         :type fetched_movie_data: dict
-        :return: True if the movie was successfully added, False if the movie already exists in the collection.
+
+        :return: True if the movie was successfully added,
+                 False if the movie already exists in the collection.
         :rtype: bool
         """
         fetched_movie_title = fetched_movie_data["Title"]
@@ -123,6 +131,7 @@ class JSONDataManager(DataManagerInterface):
             if fetched_movie_title == movie["title"]:
                 return False
 
+        # Add unique ID with prefix and create movie dict
         unique_id = str(uuid4())
         new_movie = {
             "title": fetched_movie_title,
@@ -141,13 +150,17 @@ class JSONDataManager(DataManagerInterface):
         """
         Update the specified movie data for a given user.
 
-        :param user_id: The unique identifier of the user.
+        :param user_id: Unique identifier of the user.
         :type user_id: str
-        :param movie_id: The unique identifier of the movie to be updated.
+
+        :param movie_id: Unique identifier of the movie to be updated.
         :type movie_id: str
-        :param update_data: The updated data for the movie.
+
+        :param update_data: Updated data for the movie.
         :type update_data: dict
-        :return: True if the movie data was successfully updated, False if the user or movie does not exist.
+
+        :return: True if the movie data was successfully updated,
+                 False if the user or movie does not exist.
         :rtype: bool
         """
         all_users = self.get_all_users()
@@ -174,9 +187,12 @@ class JSONDataManager(DataManagerInterface):
 
         :param user_id: The unique identifier of the user.
         :type user_id: str
+
         :param movie_id: The unique identifier of the movie to be deleted.
         :type movie_id: str
-        :return: True if the movie was successfully deleted, False if the user or movie does not exist.
+
+        :return: True if the movie was successfully deleted,
+                 False if the user or movie does not exist.
         :rtype: bool
         """
 
@@ -184,7 +200,7 @@ class JSONDataManager(DataManagerInterface):
         user = all_users.get(user_id)
         has_movies = user.get("movies")
 
-        # Is user in database or has user movies? -> return False
+        # Is user in database or has no movies? -> return False
         if not user or not has_movies:
             return False
 
