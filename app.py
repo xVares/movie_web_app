@@ -11,7 +11,7 @@ JSON_DATA_PATH = "user_data/movie_data.json"
 API_KEY = os.environ.get("MY_API_KEY")
 FETCH_MOVIE_URL = f"http://www.omdbapi.com/?apikey={API_KEY}"
 
-data_manager = JSONDataManager(TEST_JSON_DATA_PATH)
+data_manager = JSONDataManager(JSON_DATA_PATH)
 app = Flask(__name__)
 
 logging.basicConfig(
