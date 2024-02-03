@@ -5,6 +5,8 @@ from typing import Union
 
 
 class JSONDataManager(DataManagerInterface):
+    """Data manager for handling JSON files"""
+
     def __init__(self, filename: str):
         self.filename = filename
 
@@ -127,7 +129,6 @@ class JSONDataManager(DataManagerInterface):
         # Is movie already in users favorites? -> return False
         print(f"user_movies: {user_movies}")
         for movie in user_movies.values():
-            print(f"Movie: {movie}")
             if fetched_movie_title == movie["title"]:
                 return False
 

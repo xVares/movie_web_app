@@ -1,18 +1,26 @@
 import logging
 import os
 import requests
+
 from dotenv import load_dotenv
 from flask import Flask, request, render_template, abort
+from flask_sqlalchemy import SQLAlchemy
+
 from data_manager.json_data_manager import JSONDataManager
+from data_manager.sql_data_models import User, Movie, db
+from data_manager.sql_data_manager import SQLiteDataManager
 
-load_dotenv()
-
+DATA_BASE_URI = "sqlite:///user_data/movies.sqlite"
 JSON_DATA_PATH = "user_data/movie_data.json"
 API_KEY = os.environ.get("MY_API_KEY")
 FETCH_MOVIE_URL = f"http://www.omdbapi.com/?apikey={API_KEY}"
 
-data_manager = JSONDataManager(JSON_DATA_PATH)
+#  --- Configuration ---
+
 app = Flask(__name__)
+# data_manager = JSONDataManager(JSON_DATA_PATH)
+
+data_manager = SQLiteDataManager(app, DATA_BASE_URI)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -218,4 +226,14 @@ def page_not_found(e):
 
 
 if __name__ == "__main__":
+    load_dotenv()
+
     app.run(debug=True)
+
+    # To ensure that new tables defined in modules are being added to the database:
+    # Comment out code below -> Run application once -> Comment out again
+
+    #     new_user = User(user="Alice")
+    #
+    #     db.session.add(new_user)
+    #     db.session.commit()
