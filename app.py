@@ -146,7 +146,8 @@ def delete_user():
 @app.route("/users/<user_id>/add_movie", methods=["GET", "POST"])
 def add_movie(user_id):
     if request.method == "GET":
-        return render_index(title="Add Movie - Movie Web App", content_type="add_movie",
+        return render_index(title="Add Movie - Movie Web App",
+                            content_type="add_movie",
                             user_id=user_id)
 
     # If POST -> Fetch movie data
@@ -156,7 +157,7 @@ def add_movie(user_id):
 
     # Is fetching successful? -> Try to add movie to users favorites
     if is_fetch_successful:
-        adding_successful = data_manager.add_movie(user_id, is_fetch_successful, movie_data)
+        adding_successful = data_manager.add_movie(user_id, movie_data)
 
         # Is movie successfully added? -> Render success page
         if adding_successful:
@@ -170,14 +171,16 @@ def add_movie(user_id):
 def update_movie_details(user_id, movie_id):
     if request.method == "GET":
         username, movies = data_manager.get_username_and_movies(user_id)
-
         # Is movie in users favorites? -> Render update page
         movie = movies.get(movie_id)
+        print(movie)
         if movie:
-            return render_index(title="Update Movie - Movie Web App", content_type="update_movie",
+            return render_index(title="Update Movie - Movie Web App",
+                                content_type="update_movie",
                                 user_id=user_id,
                                 movie_id=movie_id,
                                 movie=movie)
+
         abort(400, description="Please don't type the URL manually. Let yourself redirect.")
 
     # If POST -> Get form data
@@ -227,13 +230,4 @@ def page_not_found(e):
 
 if __name__ == "__main__":
     load_dotenv()
-
     app.run(debug=True)
-
-    # To ensure that new tables defined in modules are being added to the database:
-    # Comment out code below -> Run application once -> Comment out again
-
-    #     new_user = User(user="Alice")
-    #
-    #     db.session.add(new_user)
-    #     db.session.commit()

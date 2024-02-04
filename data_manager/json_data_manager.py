@@ -8,6 +8,7 @@ class JSONDataManager(DataManagerInterface):
     """Data manager for handling JSON files"""
 
     def __init__(self, filename: str):
+        """Initializes the filename of the JSON data to be used"""
         self.filename = filename
 
     @staticmethod
@@ -100,15 +101,12 @@ class JSONDataManager(DataManagerInterface):
             user_movies = None
         return username, user_movies
 
-    def add_movie(self, user_id, is_fetch_successful, fetched_movie_data) -> bool:
+    def add_movie(self, user_id, fetched_movie_data) -> bool:
         """
         Add a new movie to the user's collection.
 
         :param user_id: ID of the user to whom the movie will be added.
         :type user_id: str
-
-        :param is_fetch_successful: Boolean indicating if the movie data was successfully fetched.
-        :type is_fetch_successful: bool
 
         :param fetched_movie_data: Data of the fetched movie.
         :type fetched_movie_data: dict
@@ -127,7 +125,6 @@ class JSONDataManager(DataManagerInterface):
         user_movies = user.get("movies")
 
         # Is movie already in users favorites? -> return False
-        print(f"user_movies: {user_movies}")
         for movie in user_movies.values():
             if fetched_movie_title == movie["title"]:
                 return False
@@ -175,8 +172,8 @@ class JSONDataManager(DataManagerInterface):
         # Update movie data for user
         user_movies = user["movies"]
         user_movies[movie_id].update(update_data)
-        user["movies"] = user_movies
         all_users[user_id] = user
+        user["movies"] = user_movies
 
         # Write updated data back to JSON file
         self.write_json(self.filename, all_users)
