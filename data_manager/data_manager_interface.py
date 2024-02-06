@@ -45,3 +45,8 @@ class DataManagerInterface(ABC):
     def delete_user_movie(self, user_id, movie_id):
         """Delete the specified movie of a user."""
         pass
+
+    @abstractmethod
+    def add_review(self, user_id, movie_id, review_text):
+        """Add a new review of a user for a movie in the database"""
+        pass

@@ -64,21 +64,16 @@ class Review(db.Model):
     """Represents a movie review in the database."""
 
     review_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    entry_id = db.Column(db.Integer, db.ForeignKey('user_movies.entry_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
+    movie_id = db.Column(db.Integer, db.ForeignKey("movie.movie_id"), nullable=False)
     review_text = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=False)
-
-    # Relationship: Link to UserMovies entry with backref
-    user_movie = db.relationship('UserMovies', backref=db.backref('reviews', lazy=True))
 
     def __repr__(self):
         return (f"<Review(review_id={self.review_id}, "
-                f"entry_id={self.entry_id}, "
-                f"review_text='{self.review_text[:50]}...', "
-                f"created_at={self.created_at})>")
+                f"movie_id={self.movie_id}, "
+                f"review_text='{self.review_text[:50]}...')>")
 
     def __str__(self):
         return (f"Review ID: {self.review_id}, "
-                f"Entry ID: {self.entry_id}, "
-                f"Review: '{self.review_text}', "
-                f"Date: {self.created_at}")
+                f"Movie ID: {self.movie_id}, "
+                f"Review: '{self.review_text}'")

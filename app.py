@@ -15,11 +15,9 @@ JSON_DATA_PATH = "user_data/movie_data.json"
 API_KEY = os.environ.get("MY_API_KEY")
 FETCH_MOVIE_URL = f"http://www.omdbapi.com/?apikey={API_KEY}"
 
-#  --- Configuration ---
-
+# --- Config ---
 app = Flask(__name__)
 # data_manager = JSONDataManager(JSON_DATA_PATH)
-
 data_manager = SQLiteDataManager(app, DATA_BASE_URI)
 
 logging.basicConfig(
@@ -118,8 +116,12 @@ def add_user():
         if not new_username.strip():
             raise ValueError("Your username can't be empty")
 
-        data_manager.add_user(new_username)
-        return render_index(title="Success", content_type="add_user_success")
+        is_user_added = data_manager.add_user(new_username)
+
+        if is_user_added:
+            return render_index(title="Success", content_type="add_user_success")
+
+        return abort(400, "There was an issue adding your username")
 
     except KeyError:
         abort(400, "Please provide a username")
@@ -131,9 +133,9 @@ def add_user():
 def delete_user():
     try:
         user_id = request.form["user_id"]
-        is_deletion_successful = data_manager.delete_user(user_id)
+        is_user_deleted = data_manager.delete_user(user_id)
 
-        if is_deletion_successful:
+        if is_user_deleted:
             return render_index(title="Success! - Movie Web App",
                                 content_type="delete_user_success")
         raise TypeError
@@ -157,10 +159,10 @@ def add_movie(user_id):
 
     # Is fetching successful? -> Try to add movie to users favorites
     if is_fetch_successful:
-        adding_successful = data_manager.add_movie(user_id, movie_data)
+        is_movie_added = data_manager.add_movie(user_id, movie_data)
 
         # Is movie successfully added? -> Render success page
-        if adding_successful:
+        if is_movie_added:
             return render_index(title="Success! - Movie Web App", content_type="add_movie_success")
         abort(400, description="Your movie is already in your favorites.")
 
@@ -207,9 +209,9 @@ def update_movie_details(user_id, movie_id):
 
 @app.route("/users/<user_id>/delete_movie/<movie_id>", methods=["POST"])
 def delete_movie(user_id, movie_id):
-    is_deletion_successful = data_manager.delete_user_movie(user_id, movie_id)
+    is_movie_deleted = data_manager.delete_user_movie(user_id, movie_id)
 
-    if is_deletion_successful:
+    if is_movie_deleted:
         return render_index(title="Success - Movie Web App",
                             content_type="delete_movie_success")
 
@@ -225,15 +227,24 @@ def add_review(user_id, movie_id, movie_title):
                             user_id=user_id,
                             movie_id=movie_id,
                             movie_title=movie_title)
-    # TODO: Add review to db -> Display success message
-    return "Success"
 
-    # TODO: Implement error handler
+    # If Post -> add review to db -> display success message
+    review_text = request.form.get("review_text")
+    is_review_added = data_manager.add_review(user_id, movie_id, review_text)
+
+    if is_review_added:
+        return render_index(title="Success - Movie Web App",
+                            content_type="add_review_success",
+                            movie_title=movie_title)
+
+    # HDIsplay error message if review was not added
+    abort(400, description="There was an error while adding your review")
 
 
-@app.route("reviews/<movie_id>")
+@app.route("/reviews/<movie_id>")
 def show_reviews(movie_id):
-    # TODO: implement show reviews function
+    # TODO: implement show reviews func
+    # TODO: Handle case where there are no reviews to a certain movie
     pass
 
 

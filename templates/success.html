@@ -10,8 +10,10 @@
         Movie details were successfully updated
         {% elif content_type == "delete_movie_success" %}
         Movie was successfully deleted
+        {% elif content_type == "add_review_success" %}
+        Your review for {{ movie_title }} was successfully added
         {% else %}
-        Else : Operation was successful
+        Operation was successful
         {% endif %}
     </h2>
 </div>

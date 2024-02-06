@@ -1,7 +1,7 @@
 from .data_manager_interface import DataManagerInterface
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
-from .sql_data_models import db, User, Movie, UserMovies
+from .sql_data_models import db, User, Movie, UserMovies, Review
 
 
 class SQLiteDataManager(DataManagerInterface):
@@ -59,20 +59,28 @@ class SQLiteDataManager(DataManagerInterface):
         """
         try:
             new_user = User(user=new_username)
+
             db.session.add(new_user)
             db.session.commit()
+            return True
+
         except IntegrityError as e:
             # Handle specific integrity errors, such as duplicate username
             print(f"Integrity error while adding new user: {e}")
             db.session.rollback()
+            return False
+
         except SQLAlchemyError as e:
             # Handle general SQLAlchemy errors
             print(f"Database error while adding new user: {e}")
             db.session.rollback()
+            return False
+
         except Exception as e:
             # Catch-all for any other exceptions
             print(f"Unexpected error while adding new user: {e}")
             db.session.rollback()
+            return False
 
     def delete_user(self, user_id) -> bool:
         """
@@ -240,5 +248,10 @@ class SQLiteDataManager(DataManagerInterface):
 
         return False
 
-    def add_review(self):
-        pass
+    def add_review(self, user_id, movie_id, review_text) -> bool:
+        new_review = Review(user_id=user_id, movie_id=movie_id, review_text=review_text)
+
+        db.session.add(new_review)
+        db.session.commit()
+
+        return True
