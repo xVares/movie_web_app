@@ -239,3 +239,6 @@ class SQLiteDataManager(DataManagerInterface):
             return True
 
         return False
+
+    def add_review(self):
+        pass

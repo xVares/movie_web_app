@@ -1,0 +1,8 @@
+<div class="add-user-container">
+    <h2>Add Review for {{ movie_title }} </h2>
+    <form action="{{ url_for('add_review', user_id=user_id, movie_id=movie_id, movie_title=movie_title) }}"
+        method="post" class="add-review">
+        <input type="text" name="review">
+        <button class="add-btn" type="submit" value="add review">Submit</button>
+    </form>
+</div>

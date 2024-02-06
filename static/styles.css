@@ -153,6 +153,7 @@ footer {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    align-items: center;
 }
 
 /* List User */
@@ -195,6 +196,7 @@ footer {
     padding: 30px;
     border: solid 1px black;
     border-radius: 15px;
+    white-space: nowrap;
 
     & * {
         width: 33%;

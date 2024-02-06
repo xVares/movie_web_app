@@ -217,6 +217,26 @@ def delete_movie(user_id, movie_id):
     abort(404, "User is not in database or has no movies")
 
 
+@app.route("/add_review/<user_id>/<movie_id>/<movie_title>", methods=["GET", "POST"])
+def add_review(user_id, movie_id, movie_title):
+    if request.method == "GET":
+        return render_index(title="Add Review - Movie Web App",
+                            content_type="add_review",
+                            user_id=user_id,
+                            movie_id=movie_id,
+                            movie_title=movie_title)
+    # TODO: Add review to db -> Display success message
+    return "Success"
+
+    # TODO: Implement error handler
+
+
+@app.route("reviews/<movie_id>")
+def show_reviews(movie_id):
+    # TODO: implement show reviews function
+    pass
+
+
 # --- Error Handler ---
 @app.errorhandler(400)
 def bad_request(e):
