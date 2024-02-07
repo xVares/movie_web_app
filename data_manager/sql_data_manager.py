@@ -35,7 +35,6 @@ class SQLiteDataManager(DataManagerInterface):
         :rtype: dict
         """
         try:
-            db.create_all()
             # Get ID and name of all users
             all_users = User.query.with_entities(User.user_id, User.user).all()
 
