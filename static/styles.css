@@ -136,6 +136,10 @@ ul {
     text-align: center;
 }
 
+p {
+    text-align: center;
+}
+
 textarea {
     width: 12rem;
     resize: vertical;
@@ -242,6 +246,7 @@ footer {
     display: flex;
     justify-content: space-between;
     border-top: solid 1px black;
+    gap: 1rem;
 }
 
 .user-element-container > * {
@@ -280,6 +285,12 @@ footer {
         margin: 0.5rem 0;
         border-bottom: solid 1px var(--silver-blue);
     }
+}
+
+/* List Reviews */
+
+#reviews-container {
+    max-width: 40%;
 }
 
 /* Success Message */

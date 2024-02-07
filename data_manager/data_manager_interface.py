@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class DataManagerInterface(ABC):
-    """Interface for JSON storage module."""
+    """Interface for any data manager module."""
 
     @staticmethod
     def is_fetch_successful(response):
@@ -13,22 +13,22 @@ class DataManagerInterface(ABC):
 
     @abstractmethod
     def get_all_users(self):
-        """Get all users from the storage."""
+        """Get all users from the database."""
         pass
 
     @abstractmethod
     def add_user(self, new_username):
-        """Add a new user to the storage."""
+        """Add a new user to the database."""
         pass
 
     @abstractmethod
     def delete_user(self, user_id):
-        """Delete a user from the storage."""
+        """Delete a user from the database."""
         pass
 
     @abstractmethod
     def get_username_and_movies(self, user_id):
-        """Get the name and movies of a user from the storage."""
+        """Get the name and movies of a user from the database."""
         pass
 
     @abstractmethod
@@ -48,5 +48,9 @@ class DataManagerInterface(ABC):
 
     @abstractmethod
     def add_review(self, user_id, movie_id, review_text):
-        """Add a new review of a user for a movie in the database"""
+        """Add a new review of a user for a movie to the database"""
+        pass
+
+    def get_all_reviews(self, movie_id):
+        """Get all reviews of a given movie from the database"""
         pass

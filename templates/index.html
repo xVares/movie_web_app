@@ -45,6 +45,9 @@
         {% elif content_type == "add_review" %}
         {% include "movie_templates/add-review.html" %}
 
+        {% elif content_type == "list_reviews" %}
+        {% include "movie_templates/list-reviews.html" %}
+
         {% else %}
         {% include "success.html" %}
 

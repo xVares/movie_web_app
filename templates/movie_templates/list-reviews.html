@@ -1,0 +1,20 @@
+<div id="reviews-container">
+    {% if not reviews %}
+    <h2>{{ movie_title }} currently has no reviews registered</h2>
+
+    {% else %}
+    <h2>Reviews for {{ movie_title }}</h2>
+
+    {% for review_id, review in reviews.items() %}
+
+
+    <div class="movies">
+        <h3>{{ review.get("user_name") }}</h3>
+        <ul class="movie-properties">
+            <p class="review_text">{{ review.get("review_text") }}</p>
+        </ul>
+
+    </div>
+
+    {% endfor %}
+    {% endif %}

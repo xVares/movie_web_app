@@ -237,15 +237,18 @@ def add_review(user_id, movie_id, movie_title):
                             content_type="add_review_success",
                             movie_title=movie_title)
 
-    # HDIsplay error message if review was not added
+    # Display error message if review was not added
     abort(400, description="There was an error while adding your review")
 
 
-@app.route("/reviews/<movie_id>")
-def show_reviews(movie_id):
-    # TODO: implement show reviews func
-    # TODO: Handle case where there are no reviews to a certain movie
-    pass
+@app.route("/reviews/<movie_id>/<movie_title>")
+def list_reviews(movie_id, movie_title):
+    reviews = data_manager.get_all_reviews(movie_id)
+
+    return render_index(title="list Reviews - Movie Web App",
+                        content_type="list_reviews",
+                        movie_title=movie_title,
+                        reviews=reviews)
 
 
 # --- Error Handler ---

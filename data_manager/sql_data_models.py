@@ -68,6 +68,8 @@ class Review(db.Model):
     movie_id = db.Column(db.Integer, db.ForeignKey("movie.movie_id"), nullable=False)
     review_text = db.Column(db.Text, nullable=False)
 
+    user = db.relationship('User', backref='reviews')
+
     def __repr__(self):
         return (f"<Review(review_id={self.review_id}, "
                 f"movie_id={self.movie_id}, "

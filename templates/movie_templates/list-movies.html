@@ -18,9 +18,11 @@
 
         <form id="form-update-delete-movie" action="{{ url_for('delete_movie', user_id=user_id, movie_id=movie_id) }}"
             method="post">
-            <a href="{{ url_for('update_movie_details', user_id=user_id, movie_id=movie_id) }}">Update</a>
             <a href="{{ url_for('add_review', user_id=user_id, movie_id=movie_id, movie_title=movie['title']) }}">Add
                 Review</a>
+            <a href="{{ url_for('list_reviews', movie_id=movie_id, movie_title=movie['title']) }}">Show
+                Reviews</a>
+            <a href="{{ url_for('update_movie_details', user_id=user_id, movie_id=movie_id) }}">Update</a>
             <button class="del-btn" type="submit">Delete</button>
         </form>
     </div>

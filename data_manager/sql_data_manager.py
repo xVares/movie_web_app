@@ -37,6 +37,7 @@ class SQLiteDataManager(DataManagerInterface):
         :rtype: dict
         """
         try:
+            db.create_all()
             # Get ID and name of all users
             all_users = User.query.with_entities(User.user_id, User.user).all()
 
@@ -84,12 +85,8 @@ class SQLiteDataManager(DataManagerInterface):
 
     def delete_user(self, user_id) -> bool:
         """
-        Deletes a user and all their associated movies from the database based on the provided user ID.
-
-        This method first attempts to delete all entries in the UserMovies table associated with the user_id,
-        effectively removing all user's movies associations in a single operation. Then, it deletes the user
-        record from the User table. If the user and their movies are successfully deleted, the method returns True.
-        If the user does not exist, it returns False.
+        Deletes a user and all their associated movies from the database based on the provided
+        user ID.
 
         :param user_id: The ID of the user to be deleted.
         :type user_id: int
@@ -224,7 +221,7 @@ class SQLiteDataManager(DataManagerInterface):
             db.session.commit()
             return True
         except Exception as e:
-            print(f"An error occured {e}")
+            print(f"An error occurred {e}")
             db.session.rollback()
             return False
 
@@ -234,8 +231,10 @@ class SQLiteDataManager(DataManagerInterface):
 
         :param user_id: The ID of the user whose movie entry is to be deleted.
         :type user_id: int
+
         :param movie_id: The ID of the movie to be deleted from the user's list.
         :type movie_id: int
+
         :return: True if the movie was successfully deleted, False otherwise.
         :rtype: bool
         """
@@ -249,9 +248,63 @@ class SQLiteDataManager(DataManagerInterface):
         return False
 
     def add_review(self, user_id, movie_id, review_text) -> bool:
-        new_review = Review(user_id=user_id, movie_id=movie_id, review_text=review_text)
+        """
+        Adds a new review to the database for a specific movie by a specific user.
 
-        db.session.add(new_review)
-        db.session.commit()
+        :param user_id: The ID of the user who is adding the review.
+        :type user_id: int
 
-        return True
+        :param movie_id: The ID of the movie for which the review is added.
+        :type movie_id: int
+
+        :param review_text: The content of the review being added.
+        :type review_text: str
+
+        :return: True if the review was successfully added to the database, False otherwise.
+        :rtype: bool
+        """
+        try:
+            new_review = Review(user_id=user_id, movie_id=movie_id, review_text=review_text)
+
+            db.session.add(new_review)
+            db.session.commit()
+
+            return True
+        except Exception as e:
+            print(f"An error occurred {e}")
+            db.session.rollback()
+            return False
+
+    def get_all_reviews(self, movie_id):
+        """
+        Retrieves all reviews for a given movie from the database and formats them into a dictionary.
+
+        This function performs a database query to fetch all reviews associated with the
+        specified movie ID.
+        It joins the Review and User tables to include user details in the result. The function
+        then constructs a dictionary where each key is a review ID, and the value is another
+        dictionary containing details of the review, including movie ID, user ID, username,
+        and review text.
+
+        :param movie_id: The ID of the movie for which reviews are being retrieved.
+        :type movie_id: int
+        :return: A dictionary of review details keyed by review ID.
+        :rtype: dict
+        """
+        # Get all reviews of a given movie
+        user_reviews = db.session.query(Review).join(
+            User, User.user_id == Review.user_id).filter(
+            Review.movie_id == movie_id).all()
+
+        # Create dict so jinja2 template can iterate over it
+        user_reviews_dict = {
+            review.review_id: {
+                "movie_id": review.movie_id,
+                "user_id": review.user_id,
+                "user_name": review.user.user,
+                "review_text": review.review_text
+            }
+            for review in user_reviews
+        }
+
+        return user_reviews_dict
