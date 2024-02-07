@@ -1,30 +1,9 @@
-import logging
-import os
 import requests
+from config import FETCH_MOVIE_URL, app, data_manager
+from flask import request, render_template, abort
+from api import api
 
-from dotenv import load_dotenv
-from flask import Flask, request, render_template, abort
-from flask_sqlalchemy import SQLAlchemy
-
-from data_manager.json_data_manager import JSONDataManager
-from data_manager.sql_data_models import User, Movie, db
-from data_manager.sql_data_manager import SQLiteDataManager
-
-DATA_BASE_URI = "sqlite:///user_data/movies.sqlite"
-JSON_DATA_PATH = "user_data/movie_data.json"
-API_KEY = os.environ.get("MY_API_KEY")
-FETCH_MOVIE_URL = f"http://www.omdbapi.com/?apikey={API_KEY}"
-
-# --- Config ---
-app = Flask(__name__)
-# data_manager = JSONDataManager(JSON_DATA_PATH)
-data_manager = SQLiteDataManager(app, DATA_BASE_URI)
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s %(levelname)s: %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
-)
+app.register_blueprint(api, url_prefix="/api")
 
 
 # --- Helper Functions ---
@@ -83,12 +62,14 @@ def fetch_data(url, movie_name):
 @app.route("/")
 @app.route("/users")
 def list_all_users():
+    """Render the index page listing all users."""
     users = data_manager.get_all_users()
     return render_index(title="Users - Movie Web App", users=users)
 
 
 @app.route("/users/<user_id>")
 def list_user_movies(user_id):
+    """Render the page listing movies of a specific user."""
     try:
         username, movies = data_manager.get_username_and_movies(user_id)
 
@@ -105,6 +86,7 @@ def list_user_movies(user_id):
 
 @app.route("/add_user", methods=["GET", "POST"])
 def add_user():
+    """Handle addition of a new user to the database."""
     if request.method == "GET":
         return render_index(title="Add User - Movie Web App", content_type="add_user")
 
@@ -131,14 +113,16 @@ def add_user():
 
 @app.route("/delete_user", methods=["POST"])
 def delete_user():
+    """Handle deletion of a user from the database."""
     try:
-        user_id = request.form["user_id"]
+        user_id = int(request.form["user_id"])
         is_user_deleted = data_manager.delete_user(user_id)
 
         if is_user_deleted:
             return render_index(title="Success! - Movie Web App",
                                 content_type="delete_user_success")
         raise TypeError
+
     except KeyError:
         abort(400, "We couldn't find you, please check your user ID")
     except TypeError:
@@ -147,12 +131,13 @@ def delete_user():
 
 @app.route("/users/<user_id>/add_movie", methods=["GET", "POST"])
 def add_movie(user_id):
+    """Handle addition of a movie to a user's favorites."""
     if request.method == "GET":
         return render_index(title="Add Movie - Movie Web App",
                             content_type="add_movie",
                             user_id=user_id)
 
-    # If POST -> Fetch movie data
+    # If POST -> Fetch movie data from OMDb API endpoint
     movie_name = request.form.get("movie_name")
     movie_data, is_fetch_successful = fetch_data(FETCH_MOVIE_URL,
                                                  {"t": movie_name})
@@ -171,11 +156,12 @@ def add_movie(user_id):
 
 @app.route("/users/<user_id>/update_movie/<movie_id>", methods=["GET", "POST"])
 def update_movie_details(user_id, movie_id):
+    """Handle updating details of a movie in a user's favorites."""
     if request.method == "GET":
         username, movies = data_manager.get_username_and_movies(user_id)
-        # Is movie in users favorites? -> Render update page
         movie = movies.get(movie_id)
-        print(movie)
+
+        # Is movie in users favorites? -> Render update page
         if movie:
             return render_index(title="Update Movie - Movie Web App",
                                 content_type="update_movie",
@@ -183,7 +169,7 @@ def update_movie_details(user_id, movie_id):
                                 movie_id=movie_id,
                                 movie=movie)
 
-        abort(400, description="Please don't type the URL manually. Let yourself redirect.")
+        abort(400, description="An error occurred. Please ensure to let yourself be redirected")
 
     # If POST -> Get form data
     update_data = dict(request.form)
@@ -194,7 +180,8 @@ def update_movie_details(user_id, movie_id):
                           "." in update_data["rating"])))
 
     if not is_data_valid:
-        abort(400, "Check your types. Director=str, year=int, rating=int or float")
+        abort(400, "Please ensure that your sent data has following types: Director = String, "
+                   "Year = Integer, Rating = Integer or Float")
 
     # Change update data to desired type
     update_data["year"] = int(update_data.get("year"))
@@ -209,6 +196,7 @@ def update_movie_details(user_id, movie_id):
 
 @app.route("/users/<user_id>/delete_movie/<movie_id>", methods=["POST"])
 def delete_movie(user_id, movie_id):
+    """Handle deletion of a movie from a user's favorites."""
     is_movie_deleted = data_manager.delete_user_movie(user_id, movie_id)
 
     if is_movie_deleted:
@@ -221,6 +209,7 @@ def delete_movie(user_id, movie_id):
 
 @app.route("/add_review/<user_id>/<movie_id>/<movie_title>", methods=["GET", "POST"])
 def add_review(user_id, movie_id, movie_title):
+    """Handle addition of a review for a movie by a user."""
     if request.method == "GET":
         return render_index(title="Add Review - Movie Web App",
                             content_type="add_review",
@@ -243,6 +232,7 @@ def add_review(user_id, movie_id, movie_title):
 
 @app.route("/reviews/<movie_id>/<movie_title>")
 def list_reviews(movie_id, movie_title):
+    """Render the page listing reviews for a specific movie."""
     reviews = data_manager.get_all_reviews(movie_id)
 
     return render_index(title="list Reviews - Movie Web App",
@@ -254,14 +244,15 @@ def list_reviews(movie_id, movie_title):
 # --- Error Handler ---
 @app.errorhandler(400)
 def bad_request(e):
+    """Render a template for errors with the status code 400"""
     return render_template("error_templates/400.html", error=e), 400
 
 
 @app.errorhandler(404)
 def page_not_found(e):
+    """Render a template for errors with the status code 404"""
     return render_template("error_templates/404.html", error=e), 404
 
 
 if __name__ == "__main__":
-    load_dotenv()
-    app.run(debug=True)
+    app.run(host='127.0.0.1', port=5000)

@@ -1,5 +1,4 @@
 from .data_manager_interface import DataManagerInterface
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from .sql_data_models import db, User, Movie, UserMovies, Review
 
@@ -17,9 +16,8 @@ class SQLiteDataManager(DataManagerInterface):
         :param db_uri: Database URI for the SQLAlchemy database connection.
         :type db_uri: str
         """
-        self.app = app
-        self.app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
-        self.app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+        app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
+        app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
         db.init_app(app)
 
     def get_all_users(self) -> dict:
@@ -268,8 +266,8 @@ class SQLiteDataManager(DataManagerInterface):
 
             db.session.add(new_review)
             db.session.commit()
-
             return True
+
         except Exception as e:
             print(f"An error occurred {e}")
             db.session.rollback()

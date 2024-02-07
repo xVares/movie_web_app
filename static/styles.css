@@ -36,7 +36,7 @@ header {
 
 h1 {
     font-size: 1.7rem;
-    color: #bdd4de;
+    color: var(--white);
     background-color: #3f5765;
 }
 
@@ -50,7 +50,7 @@ h3 {
     font-size: 1rem;
     margin-bottom: 0px;
     color: var(--silver-blue);
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 nav {
@@ -290,7 +290,27 @@ footer {
 /* List Reviews */
 
 #reviews-container {
-    max-width: 40%;
+    max-width: 20rem;
+}
+
+.reviews {
+    outline: solid 1px black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    box-shadow: 0 0 1rem;
+
+    & h3 {
+        color: var(--silver-blue);
+        text-decoration: none;
+    }
+}
+
+.review_text {
+    color: var(--silver-blue);
+    font-size: 0.8rem;
 }
 
 /* Success Message */

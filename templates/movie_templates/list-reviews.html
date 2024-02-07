@@ -8,10 +8,10 @@
     {% for review_id, review in reviews.items() %}
 
 
-    <div class="movies">
+    <div class="reviews">
         <h3>{{ review.get("user_name") }}</h3>
-        <ul class="movie-properties">
-            <p class="review_text">{{ review.get("review_text") }}</p>
+        <ul class="review">
+            <p class="review-text">{{ review.get("review_text") }}</p>
         </ul>
 
     </div>
